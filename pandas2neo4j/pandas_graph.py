@@ -92,27 +92,35 @@ class PandasGraph(ogm.Repository):
         to_key_column: str,
         from_model_id_key: str = None,
         to_model_id_key: str = None,
+        chunk_size: int = 0,
     ) -> pd.Series:
-        relationships = df.apply(
-            lambda row: self._create_relationship(
-                relationship,
-                *self._get_relationship_nodes(
-                    row,
-                    from_model_class,
-                    to_model_class,
-                    from_key_column,
-                    to_key_column,
-                    from_model_id_key=from_model_id_key,
-                    to_model_id_key=to_model_id_key,
-                )
-            ),
-            axis=1,
-        )
-        self.create_graph_objects(relationships)
-        return relationships
+        chunk_num = 1 if chunk_size == 0 else np.ceil(len(df) / chunk_size)
+        all_relationships = []
+        for chunk in np.array_split(df, chunk_num):
+            relationships = chunk.apply(
+                lambda row: self._create_relationship(
+                    relationship,
+                    *self._get_relationship_nodes(
+                        row,
+                        from_model_class,
+                        to_model_class,
+                        from_key_column,
+                        to_key_column,
+                        from_model_id_key=from_model_id_key,
+                        to_model_id_key=to_model_id_key,
+                    )
+                ),
+                axis=1,
+            )
+            self.create_graph_objects(relationships)
+            all_relationships.append(relationships)
+        return pd.concat(all_relationships)
 
     def create_nodes_from_dataframe(
-        self, df: pd.DataFrame, model_class: Union[ogm.Model, str], chunk_size=0,
+        self,
+        df: pd.DataFrame,
+        model_class: Union[ogm.Model, str],
+        chunk_size: int = 0,
     ) -> pd.Series:
         chunk_num = 1 if chunk_size == 0 else np.ceil(len(df) / chunk_size)
         all_nodes = []
