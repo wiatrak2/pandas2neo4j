@@ -11,6 +11,7 @@ setup(
     install_requires=[
         "py2neo>=2021.0.0",
         "pandas>=1.1.0,<2",
+        "numpy>=1.18.0,<2",
     ],
     python_requires=">=3.7",
 )

@@ -1,8 +1,9 @@
-from typing import Any, Callable, Tuple, Union
+from typing import Any, Callable, Iterable, Tuple, Union
 
 import pandas as pd
 import py2neo
 from py2neo import ogm
+import numpy as np
 
 from pandas2neo4j.pandas_model import PandasModel
 from pandas2neo4j.errors import (
@@ -12,6 +13,19 @@ from pandas2neo4j.errors import (
 
 
 class PandasGraph(ogm.Repository):
+    @property
+    def schema(self) -> py2neo.Schema:
+        return self.graph.schema
+
+    def create_graph_object(self, subgraph: Union[ogm.Model, py2neo.Entity]):
+        self.graph.create(subgraph)
+
+    def create_graph_objects(self, objects: Iterable[Union[ogm.Model, py2neo.Entity]]):
+        tx = self.graph.begin()
+        for obj in objects:
+            tx.create(obj)
+        tx.commit()
+
     def _get_node_from_model(
         self,
         model_class: ogm.Model,
@@ -68,12 +82,6 @@ class PandasGraph(ogm.Repository):
             raise NodeWithIdDoesNotExistsError
         return py2neo.Relationship(from_node, relationship, to_node)
 
-    def _save_graph_objects(self, objects: pd.Series):
-        tx = self.graph.begin()
-        for obj in objects:
-            tx.create(obj)
-        tx.commit()
-
     def create_relationships_from_dataframe(
         self,
         df: pd.DataFrame,
@@ -100,26 +108,23 @@ class PandasGraph(ogm.Repository):
             ),
             axis=1,
         )
-        self._save_graph_objects(relationships)
+        self.create_graph_objects(relationships)
         return relationships
 
-    def _create_graph_nodes_from_dataframe(
-        self, df: pd.DataFrame, node_label: str
-    ) -> pd.Series:
-        nodes = df.apply(lambda row: py2neo.Node(node_label, **row), axis=1)
-        self._save_graph_objects(nodes)
-        return nodes
-
     def create_nodes_from_dataframe(
-        self, df: pd.DataFrame, model_class: Union[ogm.Model, str]
+        self, df: pd.DataFrame, model_class: Union[ogm.Model, str], chunk_size=0,
     ) -> pd.Series:
-        if isinstance(model_class, str):
-            return self._create_graph_nodes_from_dataframe(df, model_class)
-        elif issubclass(model_class, PandasModel):
-            nodes = df.apply(model_class, axis=1)
-        elif hasattr(model_class, "from_pandas_series"):
-            nodes = df.apply(model_class.from_pandas_series, axis=1)
-        else:
-            raise NotSupportedModelClassError
-        self.save(*nodes)
-        return nodes
+        chunk_num = 1 if chunk_size == 0 else np.ceil(len(df) / chunk_size)
+        all_nodes = []
+        for chunk in np.array_split(df, chunk_num):
+            if isinstance(model_class, str):
+                nodes = chunk.apply(lambda row: py2neo.Node(model_class, **row), axis=1)
+            elif issubclass(model_class, PandasModel):
+                nodes = chunk.apply(model_class, axis=1)
+            elif hasattr(model_class, "from_pandas_series"):
+                nodes = chunk.apply(model_class.from_pandas_series, axis=1)
+            else:
+                raise NotSupportedModelClassError
+            self.create_graph_objects(nodes)
+            all_nodes.append(nodes)
+        return pd.concat(all_nodes)
