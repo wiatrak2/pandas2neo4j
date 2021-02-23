@@ -1,1 +1,2 @@
-from pandas2neo4j import errors, pandas_graph, pandas_model
+from .pandas_graph import PandasGraph
+from .pandas_model import PandasModel

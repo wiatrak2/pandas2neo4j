@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>pandas2neo4j package &mdash; pandas2neo4j  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pandas2neo4j
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">pandas2neo4j package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pandas2neo4j.errors">pandas2neo4j.errors module</a></li>
+<li><a class="reference internal" href="#module-pandas2neo4j.pandas_graph">pandas2neo4j.pandas_graph module</a></li>
+<li><a class="reference internal" href="#module-pandas2neo4j.pandas_model">pandas2neo4j.pandas_model module</a></li>
+<li><a class="reference internal" href="#module-pandas2neo4j">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pandas2neo4j</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>pandas2neo4j package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/pandas2neo4j.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pandas2neo4j-package">
+<h1>pandas2neo4j package<a class="headerlink" href="#pandas2neo4j-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-pandas2neo4j.errors">
+<span id="pandas2neo4j-errors-module"></span><h2>pandas2neo4j.errors module<a class="headerlink" href="#module-pandas2neo4j.errors" title="Permalink to this headline">¶</a></h2>
+<dl class="py exception">
+<dt id="pandas2neo4j.errors.NodeWithIdDoesNotExistsError">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.errors.</span></code><code class="sig-name descname"><span class="pre">NodeWithIdDoesNotExistsError</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.errors.NodeWithIdDoesNotExistsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pandas2neo4j.errors.Pandas2Neo4jError" title="pandas2neo4j.errors.Pandas2Neo4jError"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.errors.Pandas2Neo4jError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="pandas2neo4j.errors.NotSupportedModelClassError">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.errors.</span></code><code class="sig-name descname"><span class="pre">NotSupportedModelClassError</span></code><a class="headerlink" href="#pandas2neo4j.errors.NotSupportedModelClassError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pandas2neo4j.errors.Pandas2Neo4jError" title="pandas2neo4j.errors.Pandas2Neo4jError"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.errors.Pandas2Neo4jError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="pandas2neo4j.errors.Pandas2Neo4jError">
+<em class="property"><span class="pre">exception</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.errors.</span></code><code class="sig-name descname"><span class="pre">Pandas2Neo4jError</span></code><a class="headerlink" href="#pandas2neo4j.errors.Pandas2Neo4jError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pandas2neo4j.pandas_graph">
+<span id="pandas2neo4j-pandas-graph-module"></span><h2>pandas2neo4j.pandas_graph module<a class="headerlink" href="#module-pandas2neo4j.pandas_graph" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pandas2neo4j.pandas_graph.PandasGraph">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.pandas_graph.</span></code><code class="sig-name descname"><span class="pre">PandasGraph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Repository</span></code></p>
+<dl class="py method">
+<dt id="pandas2neo4j.pandas_graph.PandasGraph.create_graph_object">
+<code class="sig-name descname"><span class="pre">create_graph_object</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">py2neo.ogm.Model</span><span class="p"><span class="pre">,</span> </span><span class="pre">py2neo.data.Entity</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph.create_graph_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push object to remote graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>subgraph</strong> – either <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Entity</span></code> instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pandas2neo4j.pandas_graph.PandasGraph.create_graph_objects">
+<code class="sig-name descname"><span class="pre">create_graph_objects</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objects</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">py2neo.ogm.Model</span><span class="p"><span class="pre">,</span> </span><span class="pre">py2neo.data.Entity</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph.create_graph_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push collection of objects to remote graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>objects</strong> – an iterable of either <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Entity</span></code> instances.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pandas2neo4j.pandas_graph.PandasGraph.create_nodes_from_dataframe">
+<code class="sig-name descname"><span class="pre">create_nodes_from_dataframe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_class</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">py2neo.ogm.Model</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.series.Series</span><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph.create_nodes_from_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create graph nodes defined in <cite>df</cite> table. Each row should contain data of a single node.
+<cite>model_class</cite> parameter determines the class/label of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code>/<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code>
+that will be created.</p>
+<p>Return a <code class="xref py py-class docutils literal notranslate"><span class="pre">pd.Series</span></code> with either <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code> subclasses or <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances
+depending on <cite>model_class</cite> parameter. If <cite>model_class</cite> is a <cite>str</cite> the function will create a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instance for each row, where <cite>model_class</cite> value will be used as each node’s label
+and all the columns in the <cite>df</cite> will be transformed into properties. If <cite>model_class</cite> is an
+<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code> instance but not the <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code> it must provide
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">from_pandas_series()</span></code> classmethod that construct a class instance given a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code>
+containing a table’s row data. If <cite>model_class</cite> is a subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code>
+the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code> will be triggered.</p>
+<p><cite>chunk_size</cite> parameter can be used if the <cite>df</cite> table is large and should be splitted into chunks when
+creating the nodes. It specifies the maximal numbers of graph nodes to be created within a single transaction.
+<cite>numpy.array_split</cite> function is used for splitting, so the size of each part may be different than
+the number passed as the parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) – A table containing data of nodes that should be created.</p></li>
+<li><p><strong>model_class</strong> (Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>, str]) – either <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code> subclass or <cite>str</cite> determining the class/label that should
+be used to construct each object.</p></li>
+<li><p><strong>chunk_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximal number of rows that should be converted into nodes within a single transation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code> with node objects of class determined by <cite>model_class</cite> param and properties
+provided in the <cite>df</cite> table.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pandas2neo4j.pandas_graph.PandasGraph.create_relationships_from_dataframe">
+<code class="sig-name descname"><span class="pre">create_relationships_from_dataframe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relationship</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_model_class</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">py2neo.ogm.Model</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_model_class</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">py2neo.ogm.Model</span><span class="p"><span class="pre">,</span> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_key_column</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_key_column</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_model_id_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_model_id_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunk_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.series.Series</span><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph.create_relationships_from_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create relationships of type <cite>relationship</cite> between instances of <cite>from_model_class</cite> and <cite>to_model_class</cite>.
+Return a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Relationship</span></code> objects that represent each relationship
+in the table.</p>
+<p>Relationships are listed in <cite>df: pandas.DataFrame</cite> where rows contain pairs of ids sufficient to identify
+the entities that should be connected. <cite>from_key_column</cite> and <cite>to_key_column</cite> arguments specify names of the
+columns that contain these ids. By default <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>’s <em>__primarykey__</em> is used to identify the
+nodes with id values, however other properties can be used by specifying <cite>from_model_id_key</cite>/<cite>to_model_id_key</cite>.
+These values are also required if <cite>from_model_class</cite> or <cite>to_model_class</cite> are not provided as a subclass of
+<cite>ogm.Model</cite> but a string with node label is provided instead.</p>
+<p><cite>chunk_size</cite> parameter can be used if the <cite>df</cite> table is large. It specifies the maximal number of relationships
+than can be created within a single transaction. Note that <cite>numpy.array_split</cite> function is used to split the
+table into chunks, so the size of each part may be different than the number specified in the <cite>chunk_size</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) – A table with relationships key pairs. Each row should contain ids of already existing nodes in
+<cite>from_key_column</cite> and <cite>to_key_column</cite> columns.</p></li>
+<li><p><strong>relationship</strong> (<em>str</em>) – Name of the relationship that should be created</p></li>
+<li><p><strong>from_model_class</strong> (Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>, str]) – Either <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass (e.g. subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code>)
+or <cite>str</cite> with class name/label of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code>/<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances that
+should be starting nodes of each relationship.</p></li>
+<li><p><strong>to_model_class</strong> (Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>, str]) – Either <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass (e.g. subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code>)
+or <cite>str</cite> with class name/label of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code>/<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances that
+should be ending nodes of each relationship.</p></li>
+<li><p><strong>from_key_column</strong> (<em>str</em>) – Name of the column in <cite>df</cite> table containing ids of the relationships starting nodes.</p></li>
+<li><p><strong>to_key_column</strong> (<em>str</em>) – Name of the column in <cite>df</cite> table containing ids of the relationships ending nodes.</p></li>
+<li><p><strong>from_model_id_key</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the property that should be used to identify the node by value specified in
+<cite>from_key_column</cite>. If <cite>from_model_class</cite> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass the <em>__primarykey__</em> is used
+by default and this parameter can be omitted.</p></li>
+<li><p><strong>to_model_id_key</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the property that should be used to identify the node by value specified in
+<cite>to_key_column</cite>. If <cite>to_model_class</cite> is a <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass the <em>__primarykey__</em> is used
+by default and this parameter can be omitted.</p></li>
+<li><p><strong>chunk_size</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximal number of rows that should be converted into relationships within a single transation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code> with <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Relationship</span></code> objects for each row in the <cite>df</cite> table.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="pandas2neo4j.pandas_graph.PandasGraph.schema">
+<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">schema</span></code><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph.schema" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-pandas2neo4j.pandas_model">
+<span id="pandas2neo4j-pandas-model-module"></span><h2>pandas2neo4j.pandas_model module<a class="headerlink" href="#module-pandas2neo4j.pandas_model" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pandas2neo4j.pandas_model.PandasModel">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.pandas_model.</span></code><code class="sig-name descname"><span class="pre">PandasModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.series.Series</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.pandas_model.PandasModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pandas2neo4j">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pandas2neo4j" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Wojciech Pratkowiecki.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
