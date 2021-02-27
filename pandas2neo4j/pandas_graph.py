@@ -1,10 +1,12 @@
-from typing import Any, Callable, Iterable, Tuple, Union
+from typing import Any, Callable, Iterable, List, Tuple, Union
 
 import pandas as pd
 import py2neo
+from py2neo import matching
 from py2neo import ogm
 import numpy as np
 
+import pandas2neo4j
 from pandas2neo4j.pandas_model import PandasModel
 from pandas2neo4j.errors import (
     NodeWithIdDoesNotExistsError,
@@ -16,6 +18,10 @@ class PandasGraph(ogm.Repository):
     @property
     def schema(self) -> py2neo.Schema:
         return self.graph.schema
+
+    @property
+    def _node_matcher(self) -> matching.NodeMatcher:
+        return matching.NodeMatcher(self.graph)
 
     def create_graph_object(self, subgraph: Union[ogm.Model, py2neo.Entity]):
         """
@@ -76,9 +82,7 @@ class PandasGraph(ogm.Repository):
         from_node_getter = self._node_getter(from_model_class)
         to_node_getter = self._node_getter(to_model_class)
         return (
-            from_node_getter(
-                from_model_class, from_model_id_key, row[from_key_column]
-            ),
+            from_node_getter(from_model_class, from_model_id_key, row[from_key_column]),
             to_node_getter(to_model_class, to_model_id_key, row[to_key_column]),
         )
 
@@ -163,7 +167,7 @@ class PandasGraph(ogm.Repository):
                         to_key_column,
                         from_model_id_key=from_model_id_key,
                         to_model_id_key=to_model_id_key,
-                    )
+                    ),
                 ),
                 axis=1,
             )
@@ -220,3 +224,46 @@ class PandasGraph(ogm.Repository):
             self.create_graph_objects(nodes)
             all_nodes.append(nodes)
         return pd.concat(all_nodes)
+
+    def get_graph_models(self, model_class: ogm.Model) -> List[ogm.Model]:
+        return list(model_class.match(self))
+
+    def get_graph_nodes(self, label: str) -> List[py2neo.Node]:
+        return list(self._node_matcher.match(label))
+
+    def get_nodes_for_dataframe(
+        self, node_label: str, node_id_property: str, df: pd.DataFrame, id_column_name: str
+    ) -> List[py2neo.Node]:
+        match_condition = {node_id_property: matching.IN(df[id_column_name])}
+        return list(self._node_matcher.match(node_label, **match_condition).all())
+
+    def get_nodes_models_for_dataframe(
+        self,
+        model_class: ogm.Model,
+        node_label: str,
+        df: pd.DataFrame,
+        id_column_name: str,
+        node_id_property: str = None,
+    ) -> pd.DataFrame:
+        if node_id_property is None:
+            node_id_property = model_class.__primarykey__
+        models_column = pd.Series(
+            self.get_nodes_for_dataframe(node_label, node_id_property, df, id_column_name)
+        ).apply(model_class.wrap)
+        models_dict = {
+            node_id_property: models_column.apply(lambda n: getattr(n, node_id_property)),
+            model_class.__name__: models_column,
+        }
+        return pd.DataFrame(models_dict)
+
+    def get_dataframe_for_models(
+        self, model_class: ogm.Model, columns: List[str] = None
+    ) -> pd.DataFrame:
+        if not hasattr(model_class, "to_dict"):
+            raise NotSupportedModelClassError(
+                f"Unable to construct pd.DataFrame from {model_class.__name__} model class - `to_dict` method is missing."
+            )
+        return pandas2neo4j.models_to_dataframe(model_class.match(self), columns)
+
+    def get_dataframe_for_label(self, label: str, columns: List[str] = None):
+        return pandas2neo4j.nodes_to_dataframe(self._node_matcher.match(label), columns)
