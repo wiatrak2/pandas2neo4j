@@ -19,3 +19,14 @@ class NodeWithIdDoesNotExistsError(Pandas2Neo4jError):
 
 class PropertyValueWithInvalidTypeError(Pandas2Neo4jError):
     pass
+
+
+class NotNullPropertyError(Pandas2Neo4jError):
+    def __init__(self, property_instance):
+        self.property_instance = property_instance
+
+    def __str__(self):
+        return (
+            f"Property {self.property_instance.__class__.__name__} has `not_null` flag set to True.\n"
+            f"None value was provided hovewer. Please use value with type {self.property_instance.TYPE}"
+        )
