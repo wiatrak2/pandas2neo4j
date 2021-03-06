@@ -30,3 +30,7 @@ class NotNullPropertyError(Pandas2Neo4jError):
             f"Property {self.property_instance.__class__.__name__} has `not_null` flag set to True.\n"
             f"None value was provided hovewer. Please use value with type {self.property_instance.TYPE}"
         )
+
+
+class InvalidArgumentsConfigurationError(Pandas2Neo4jError):
+    pass

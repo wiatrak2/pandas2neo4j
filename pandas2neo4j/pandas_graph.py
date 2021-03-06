@@ -1,5 +1,6 @@
 from typing import Any, Callable, Iterable, List, Tuple, Union
 
+from cached_property import cached_property
 import pandas as pd
 import py2neo
 from py2neo import matching
@@ -11,6 +12,7 @@ from pandas2neo4j.pandas_model import PandasModel
 from pandas2neo4j.errors import (
     NodeWithIdDoesNotExistsError,
     NotSupportedModelClassError,
+    InvalidArgumentsConfigurationError,
 )
 
 
@@ -19,9 +21,13 @@ class PandasGraph(ogm.Repository):
     def schema(self) -> py2neo.Schema:
         return self.graph.schema
 
-    @property
+    @cached_property
     def _node_matcher(self) -> matching.NodeMatcher:
         return matching.NodeMatcher(self.graph)
+
+    @cached_property
+    def _relationship_matcher(self) -> matching.RelationshipMatcher:
+        return matching.RelationshipMatcher(self.graph)
 
     def create_graph_object(self, subgraph: Union[ogm.Model, py2neo.Entity]):
         """
@@ -267,3 +273,39 @@ class PandasGraph(ogm.Repository):
 
     def get_dataframe_for_label(self, label: str, columns: List[str] = None):
         return pandas2neo4j.nodes_to_dataframe(self._node_matcher.match(label), columns)
+
+    def get_relationships(
+        self,
+        relationship: str,
+        nodes: Iterable[Union[ogm.Model, py2neo.Node]] = None,
+        inner_only=False,
+    ) -> List[py2neo.Relationship]:
+        """
+        Return list of :class:`py2neo.Relationship` objects representing given relationship available in the graph.
+        If `nodes` argument is used return only relationships where one of the nodes is provided in the parameter.
+        If `nodes` is used and `inner_only` is True return only relationships where both nodes are provided in `nodes`.
+        """
+        if nodes is None and inner_only:
+            raise InvalidArgumentsConfigurationError(
+                "`inner_only` argument can be used only when `nodes` are provided."
+            )
+
+        if nodes is None:
+            return self._relationship_matcher.match(r_type=relationship)
+        relationships = set()
+        try:
+            nodes_set = {node if type(node) is py2neo.Node else node.__node__ for node in nodes}
+        except AttributeError:
+            raise NotSupportedModelClassError(
+                f"Unable to obtain `py2neo.Node` instance from provided nodes."
+            )
+        for node in nodes_set:
+            node_relationships = set(
+                self._relationship_matcher.match(nodes={node}, r_type=relationship)
+            )
+            if inner_only:
+                node_relationships = {
+                    rel for rel in node_relationships if set(rel.nodes).issubset(nodes_set)
+                }
+            relationships |= set(node_relationships)
+        return list(relationships)
