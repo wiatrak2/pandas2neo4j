@@ -36,6 +36,8 @@ class PandasGraph(ogm.Repository):
 
         :param subgraph: either :class:`py2neo.ogm.Model` of :class:`py2neo.Entity` instance.
         """
+        if hasattr(subgraph, "__node__"):
+            subgraph = subgraph.__node__
         self.graph.create(subgraph)
 
     def create_graph_objects(self, objects: Iterable[Union[ogm.Model, py2neo.Entity]]):
@@ -46,6 +48,8 @@ class PandasGraph(ogm.Repository):
         """
         tx = self.graph.begin()
         for obj in objects:
+            if hasattr(obj, "__node__"):
+                obj = obj.__node__
             tx.create(obj)
         tx.commit()
 
@@ -343,7 +347,7 @@ class PandasGraph(ogm.Repository):
         to_key_column: str,
         from_model_id_key: str = None,
         to_model_id_key: str = None,
-    ):
+    ) -> pd.DataFrame:
         if from_model_id_key is None:
             if isinstance(from_model_class, str):
                 raise InvalidArgumentsConfigurationError(
