@@ -10,9 +10,10 @@ import numpy as np
 import pandas2neo4j
 from pandas2neo4j.pandas_model import PandasModel
 from pandas2neo4j.errors import (
-    NodeWithIdDoesNotExistsError,
+    NodeWithIdDoesNotExistError,
     NotSupportedModelClassError,
     InvalidArgumentsConfigurationError,
+    RelationshipDoesNotExistError,
 )
 
 
@@ -57,7 +58,7 @@ class PandasGraph(ogm.Repository):
         del id_key
         model_instance = self.get(model_class, id_value)
         if model_instance is None:
-            raise NodeWithIdDoesNotExistsError(model_class, id_value)
+            raise NodeWithIdDoesNotExistError(model_class, id_value)
         return model_instance.__node__
 
     def _get_node_from_str(
@@ -99,7 +100,7 @@ class PandasGraph(ogm.Repository):
         to_node: py2neo.Node,
     ) -> py2neo.Relationship:
         if from_node is None or to_node is None:
-            raise NodeWithIdDoesNotExistsError
+            raise NodeWithIdDoesNotExistError()
         return py2neo.Relationship(from_node, relationship, to_node)
 
     def create_relationships_from_dataframe(
@@ -238,29 +239,51 @@ class PandasGraph(ogm.Repository):
         return list(self._node_matcher.match(label))
 
     def get_nodes_for_dataframe(
-        self, node_label: str, node_id_property: str, df: pd.DataFrame, id_column_name: str
+        self, df: pd.DataFrame, node_label: str, node_id_property: str, id_column_name: str
     ) -> List[py2neo.Node]:
         match_condition = {node_id_property: matching.IN(df[id_column_name])}
         return list(self._node_matcher.match(node_label, **match_condition).all())
 
     def get_nodes_models_for_dataframe(
         self,
+        df: pd.DataFrame,
         model_class: ogm.Model,
         node_label: str,
-        df: pd.DataFrame,
         id_column_name: str,
         node_id_property: str = None,
     ) -> pd.DataFrame:
         if node_id_property is None:
-            node_id_property = model_class.__primarykey__
+            node_id_property = id_column_name
         models_column = pd.Series(
-            self.get_nodes_for_dataframe(node_label, node_id_property, df, id_column_name)
+            self.get_nodes_for_dataframe(df, node_label, node_id_property, id_column_name)
         ).apply(model_class.wrap)
         models_dict = {
             node_id_property: models_column.apply(lambda n: getattr(n, node_id_property)),
             model_class.__name__: models_column,
         }
         return pd.DataFrame(models_dict)
+
+    def _match_model(
+        self, model_class: Union[ogm.Model, str], **match_condition
+    ) -> Union[ogm.Model, py2neo.Node]:
+        if isinstance(model_class, str):
+            return self._node_matcher.match(model_class).first()
+        return model_class.match(self).where(**match_condition).first()
+
+    def get_models_for_dataframe(
+        self,
+        df: pd.DataFrame,
+        model_class: ogm.Model,
+        id_column_name: str,
+        node_id_property: str = None,
+    ) -> pd.DataFrame:
+        if node_id_property is None:
+            node_id_property = id_column_name
+        models_df = df[[id_column_name]]
+        models_df[model_class.__name__] = df[id_column_name].apply(
+            lambda id_value: self._match_model(model_class, **{node_id_property: id_value})
+        )
+        return models_df
 
     def get_dataframe_for_models(
         self, model_class: ogm.Model, columns: List[str] = None
@@ -309,3 +332,62 @@ class PandasGraph(ogm.Repository):
                 }
             relationships |= set(node_relationships)
         return list(relationships)
+
+    def get_relationships_for_dataframe(
+        self,
+        df: pd.DataFrame,
+        relationship: str,
+        from_model_class: Union[ogm.Model, str],
+        to_model_class: Union[ogm.Model, str],
+        from_key_column: str,
+        to_key_column: str,
+        from_model_id_key: str = None,
+        to_model_id_key: str = None,
+    ):
+        if from_model_id_key is None:
+            if isinstance(from_model_class, str):
+                raise InvalidArgumentsConfigurationError(
+                    f"If `from_model_class` is string ('{from_model_class}' provided) it is assumed to be "
+                    "the label of a `py2neo.Node` object and `from_model_id_key` must be defined to match the node."
+                )
+            from_model_id_key = from_model_class.__primarykey__
+
+        if to_model_id_key is None:
+            if isinstance(to_model_class, str):
+                raise InvalidArgumentsConfigurationError(
+                    f"If `to_model_id_key` is string ('{to_model_id_key}' provided) it is assumed to be "
+                    "the label of a `py2neo.Node` object and `from_model_id_key` must be defined to match the node."
+                )
+            to_model_id_key = to_model_class.__primarykey__
+
+        def _match_relationship(row: pd.Series):
+            from_model_id = row[from_key_column]
+            to_model_id = row[to_key_column]
+            from_model_instance = self._match_model(
+                from_model_class, **{from_model_id_key: from_model_id}
+            )
+            to_model_instance = self._match_model(to_model_class, **{to_model_id_key: to_model_id})
+            if from_model_instance is None:
+                raise NodeWithIdDoesNotExistError(from_model_class, from_model_id)
+            if to_model_instance is None:
+                raise NodeWithIdDoesNotExistError(to_model_class, to_model_id)
+            from_node = (
+                from_model_instance
+                if isinstance(from_model_instance, py2neo.Node)
+                else from_model_instance.__node__
+            )
+            to_node = (
+                to_model_instance
+                if isinstance(to_model_instance, py2neo.Node)
+                else to_model_instance.__node__
+            )
+            relationship_object = self._relationship_matcher.match(
+                nodes=[from_node, to_node], r_type=relationship
+            ).first()
+            if relationship_object is None:
+                raise RelationshipDoesNotExistError(relationship, from_node, to_node)
+            return relationship_object
+
+        relationship_df = df[[from_key_column, to_key_column]]
+        relationship_df[relationship] = relationship_df.apply(_match_relationship, axis=1)
+        return relationship_df
