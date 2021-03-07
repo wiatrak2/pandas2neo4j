@@ -337,6 +337,24 @@ class PandasGraph(ogm.Repository):
             relationships |= set(node_relationships)
         return list(relationships)
 
+    def get_dataframe_for_relationship(
+        self,
+        relationship: str,
+        from_node_property: str,
+        to_node_property: str,
+        nodes: Iterable[Union[ogm.Model, py2neo.Node]] = None,
+        inner_only=False,
+    ) -> pd.DataFrame:
+        relationship_objects = self.get_relationships(relationship, nodes, inner_only)
+        relationship_ids = []
+        for rel in relationship_objects:
+            form_node, to_node = rel.nodes
+            relationship_ids.append((form_node[from_node_property], to_node[to_node_property]))
+        if from_node_property == to_node_property:
+            from_node_property = f"{from_node_property}_from"
+            to_node_property = f"{to_node_property}_to"
+        return pd.DataFrame(relationship_ids, columns=[from_node_property, to_node_property])
+
     def get_relationships_for_dataframe(
         self,
         df: pd.DataFrame,
