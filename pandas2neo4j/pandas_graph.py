@@ -218,7 +218,7 @@ class PandasGraph(ogm.Repository):
         :type model_class: Union[:class:`ogm.Model`, str]
         :param chunk_size: Maximal number of rows that should be converted into nodes within a single transation.
         :type chunk_size: int, optional
-        :returns: A :class:`pandas.Series` with node objects of class determined by `model_class` param and properties
+        :return: A :class:`pandas.Series` with node objects of class determined by `model_class` param and properties
             provided in the `df` table.
         """
         chunk_num = 1 if chunk_size == 0 else np.ceil(len(df) / chunk_size)
@@ -237,14 +237,44 @@ class PandasGraph(ogm.Repository):
         return pd.concat(all_nodes)
 
     def get_graph_models(self, model_class: ogm.Model) -> List[ogm.Model]:
+        """
+        Return list with all `model_class` objects available in the graph.
+
+        :param model_class: :class:`ogm.Model` class which objects should be returned.
+        :type model_class: :class:`ogm.Model`
+        """
         return list(model_class.match(self))
 
     def get_graph_nodes(self, label: str) -> List[py2neo.Node]:
+        """
+        Return list with all `py2neo.Node` nodes matching given label availbale in the graph.
+
+        :param label: label determining nodes to return.
+        :type label: str
+        """
         return list(self._node_matcher.match(label))
 
     def get_nodes_for_dataframe(
         self, df: pd.DataFrame, node_label: str, node_id_property: str, id_column_name: str
     ) -> List[py2neo.Node]:
+        """
+        Match nodes in the graph with rows of `df` DataFrame. `node_label` is the label of nodes
+        that should be used for the matching. From all of these nodes select ones with `node_id_property`
+        property value available in the `id_column_name` column of the `df` DataFrame. Number of returned
+        nodes may differ the length of `df` table.
+
+        :param df: a table which rows describe nodes that should be found in the graph.
+        :type df: :class:`pandas.DataFrame`
+        :param node_label: label of nodes that should be mapped to rows of `df` table.
+        :type node_label: str
+        :param node_id_property: name of property that should be use to determine whether a particular
+            node maps to a row of `df` table.
+        :type node_id_property: str
+        :param id_column_name: name of `df` table's column which values should be matched with
+            `node_id_property` property of nodes.
+        :type id_column_name: str
+        :return: List with all :class:`py2neo.Node` objects matching the rows of `df` table.
+        """
         match_condition = {node_id_property: matching.IN(df[id_column_name])}
         return list(self._node_matcher.match(node_label, **match_condition).all())
 
@@ -256,6 +286,32 @@ class PandasGraph(ogm.Repository):
         id_column_name: str,
         node_id_property: str = None,
     ) -> pd.DataFrame:
+        """
+        Get all available nodes in the graph with `node_label` label matching rows of `df` table.
+        Cast the matching rows to `model_class` objects. `node_id_property` determines name of
+        the property that is used to map nodes in the graph to rows of the table - if the property
+        matches one of values in `id_column_name` column it's going to be included in produced DataFrame.
+        If `node_id_property` is not provided look for `id_column_name` property.
+
+        This function is especially useful if one has created some nodes in the graph based on `df` rows
+        (e.g. with :meth:`PandasGraph.create_nodes_from_dataframe` method) and wants to
+        retreive the `model_class` objects in another execution.
+
+        :param df: a table which rows describe nodes that should be found in the graph.
+        :type df: :class:`pandas.DataFrame`
+        :param model_class: the :class:`ogm.Model` class that should be used to wrap the matching nodes.
+        :type model_class: :class:`ogm.Model`
+        :param node_label: label of nodes that should be mapped to rows of `df` table.
+        :type node_label: str
+        :param id_column_name: name of `df` table's column which values should be matched with
+            `node_id_property` property of nodes.
+        :type id_column_name: str
+        :param node_id_property: name of property that should be use to determine whether a particular
+            node maps to a row of `df` table. If not provided map by property named with `id_column_name`.
+        :type node_id_property: str, optional
+        :return: :class:`pandas.DataFrame` table which rows contain :class:`ogm.Model` objects as well as
+            the value of property used to map these nodes.
+        """
         if node_id_property is None:
             node_id_property = id_column_name
         models_column = pd.Series(
@@ -281,6 +337,24 @@ class PandasGraph(ogm.Repository):
         id_column_name: str,
         node_id_property: str = None,
     ) -> pd.DataFrame:
+        """
+        Get all available `model_class` nodes matching rows of `df` table. For each row of the table
+        return a single `model_class` object or None if a row could not be mapped to one of the graph's
+        nodes.
+
+        :param df: a table which rows describe nodes that should be found in the graph.
+        :type df: :class:`pandas.DataFrame`
+        :param model_class: the :class:`ogm.Model` which models should be matched and returned.
+        :type model_class: :class:`ogm.Model`
+        :param id_column_name: name of `df` table's column which values should be matched with
+            `node_id_property` property of nodes.
+        :type id_column_name: str
+        :param node_id_property: name of property that should be use to determine whether a particular
+            node maps to a row of `df` table. If not provided map by property named with `id_column_name`.
+        :type node_id_property: str, optional
+        :return: :class:`pandas.DataFrame` table which one column is a duplicate of df[id_column_name] and
+            the other contains corresponding `model_class` objects.
+        """
         if node_id_property is None:
             node_id_property = id_column_name
         models_df = df[[id_column_name]]
@@ -292,6 +366,20 @@ class PandasGraph(ogm.Repository):
     def get_dataframe_for_models(
         self, model_class: ogm.Model, columns: List[str] = None
     ) -> pd.DataFrame:
+        """
+        Dump `model_class` nodes available in the graph to `pandas.DataFrame`. The `model_class` must
+        provide `to_dict` method that is used to construct a row for each node. If only subset of the
+        dictionary items returned by the `to_dict` methods should be used one can specify them (and their
+        order) with `columns` parameter.
+
+        `to_dict` method is provided by each `pandas2neo4j.PandasModel` instance.
+
+        :param model_class: class of nodes that should be used to construct the table.
+        :type model_class: :class:`ogm.Model`
+        :param columns: list of produced table columns names.
+        :type columns: List[str], optional.
+        :return: :class:`pandas.DataFrame` which rows represent the `model_class` nodes in the graph.
+        """
         if not hasattr(model_class, "to_dict"):
             raise NotSupportedModelClassError(
                 f"Unable to construct pd.DataFrame from {model_class.__name__} model class - `to_dict` method is missing."
@@ -299,6 +387,17 @@ class PandasGraph(ogm.Repository):
         return pandas2neo4j.models_to_dataframe(model_class.match(self), columns)
 
     def get_dataframe_for_label(self, label: str, columns: List[str] = None):
+        """
+        Dump all nodes with `label` label available in the graph to `pandas.DataFrame` table. If only subset
+        of nodes' properties should be used to construct each row of the table one can specify them with `columns`
+        parameter.
+
+        :param label: label of nodes that should be dumped to the table.
+        :type label: str
+        :param columns: list of produced table columns names.
+        :type columns: List[str], optional.
+        :return: :class:`pandas.DataFrame` which rows represent the graph's nodes.
+        """
         return pandas2neo4j.nodes_to_dataframe(self._node_matcher.match(label), columns)
 
     def get_relationships(
@@ -311,6 +410,16 @@ class PandasGraph(ogm.Repository):
         Return list of :class:`py2neo.Relationship` objects representing given relationship available in the graph.
         If `nodes` argument is used return only relationships where one of the nodes is provided in the parameter.
         If `nodes` is used and `inner_only` is True return only relationships where both nodes are provided in `nodes`.
+
+        :param relationship: name of the relationship which objects should be returned.
+        :type relationship: str
+        :parm nodes: Iterable of either :class:`ogm.Model` or :class:`py2neo.Node` nodes that should be start/end
+            node of returned :class:`py2neo.Relationship` objects. If `inner_only` is True both start and end nodes
+            of a relationship must be provided in `nodes` to include such relationship in the result.
+        :type nodes: Iterable[Union[:class:`ogm.Model`, :class:`py2neo.Node`]]
+        :param inner_only: Boolean value determining whether both start and end nodes of a single :class:`py2neo.Relationship`
+            object should be available in `nodes`.
+        :return: List of :class:`py2neo.Relationship` objects matching the relationship.
         """
         if nodes is None and inner_only:
             raise InvalidArgumentsConfigurationError(
@@ -345,6 +454,33 @@ class PandasGraph(ogm.Repository):
         nodes: Iterable[Union[ogm.Model, py2neo.Node]] = None,
         inner_only=False,
     ) -> pd.DataFrame:
+        """
+        Find all :class:`py2neo.Relationship` objects representing given relationship available in the graph
+        and construct a `pandas.DataFrame` table with their nodes. A single row in returned table describes a single
+        relationship. For each matching relationship between nodes S and E use S[from_node_property] and
+        E[to_node_property] as the corresponding row values.
+
+        If `nodes` argument is used construct the table only with relationships where one of the
+        nodes is provided in the parameter.
+        If `nodes` is used and `inner_only` is True use only relationships where both nodes are
+        provided in `nodes`.
+
+        :param relationship: name of the relationship which objects should be used to construct the table.
+        :type relationship: str
+        :param from_node_property: Name of relationship's start node property that should be used in the constructed
+            table in a row for corresponding relationship object.
+        :type from_node_property: str
+        :param to_node_property: Name of relationship's end node property that should be used in the constructed
+            table in a row for corresponding relationship object.
+        :type to_node_property: str
+        :parm nodes: Iterable of either :class:`ogm.Model` or :class:`py2neo.Node` nodes that should be start/end
+            node of used :class:`py2neo.Relationship` objects. If `inner_only` is True both start and end nodes
+            of a relationship must be provided in `nodes` to include such relationship in the returned table.
+        :type nodes: Iterable[Union[:class:`ogm.Model`, :class:`py2neo.Node`]]
+        :param inner_only: Boolean value determining whether both start and end nodes of a single :class:`py2neo.Relationship`
+            object should be available in `nodes`.
+        :return: :class:`pandas.DataFrame` table that rows represent the available relationship objects in the graph.
+        """
         relationship_objects = self.get_relationships(relationship, nodes, inner_only)
         relationship_ids = []
         for rel in relationship_objects:
@@ -366,6 +502,42 @@ class PandasGraph(ogm.Repository):
         from_model_id_key: str = None,
         to_model_id_key: str = None,
     ) -> pd.DataFrame:
+        """
+        Map relationships described by `df` table with :class:`py2neo.Relationship` objects available in the
+        graph.
+
+        This method is useful if one has created the :class:`py2neo.Relationship` objects based on a DataFrame
+        values (e.g. with :meth:`PandasGraph.create_relationships_from_dataframe` method) and wants to retreive
+        these objects in another execution.
+
+        :param df: table describing the relationships that should be mapped with :class:`py2neo.Relationship`
+            objects in the graph.
+        :type df: :class:`pandas.DataFrame`
+        :param relationship: name of the relationship that should be matched.
+        :type relationship: str
+        :param from_model_class: either :class:`ogm.Model` or string with name of label determining nodes
+            that should be used to map start nodes of the relationship.
+        :type from_model_class: Union[:class:`ogm.Model`, str]
+        :param to_model_class: either :class:`ogm.Model` or string with name of label determining nodes
+            that should be used to map end nodes of the relationship.
+        :type to_model_class: Union[:class:`ogm.Model`, str]
+        :param from_key_column: name of `df` table's column containing values that should be used to match
+            the start node of each relationship
+        :type from_key_column: str
+        :param to_key_column: name of `df` table's column containing values that should be used to match
+            the end node of each relationship
+        :type to_key_column: str
+        :param from_model_id_key: name of property that should be used to find matching start nodes in the graph.
+            If `from_model_class` is a :class:`ogm.Model` subclass this parameter can be omitted and the
+            `__primarykey__` of the class will be used.
+        :type from_model_id_key: str, optional
+        :param to_model_id_key: name of property that should be used to find matching end nodes in the graph.
+            If `to_model_class` is a :class:`ogm.Model` subclass this parameter can be omitted and the
+            `__primarykey__` of the class will be used.
+        :type to_model_id_key: str, optional
+        :return: :class:`pandas.DataFrame` table where a single row contains df[from_key_column], df[to_key_column]
+            and :class:`py2neo.Relationship` representing corresponding relationship.
+        """
         if from_model_id_key is None:
             if isinstance(from_model_class, str):
                 raise InvalidArgumentsConfigurationError(
