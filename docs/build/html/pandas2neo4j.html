@@ -89,6 +89,7 @@
 <li><a class="reference internal" href="#module-pandas2neo4j.errors">pandas2neo4j.errors module</a></li>
 <li><a class="reference internal" href="#module-pandas2neo4j.pandas_graph">pandas2neo4j.pandas_graph module</a></li>
 <li><a class="reference internal" href="#module-pandas2neo4j.pandas_model">pandas2neo4j.pandas_model module</a></li>
+<li><a class="reference internal" href="#module-pandas2neo4j.properties">pandas2neo4j.properties module</a></li>
 <li><a class="reference internal" href="#module-pandas2neo4j">Module contents</a></li>
 </ul>
 </li>
@@ -215,6 +216,11 @@
 <dt id="pandas2neo4j.pandas_graph.PandasGraph">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.pandas_graph.</span></code><code class="sig-name descname"><span class="pre">PandasGraph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Repository</span></code></p>
+<p>Class representing the underlying graph.</p>
+<p><a class="reference internal" href="#pandas2neo4j.pandas_graph.PandasGraph" title="pandas2neo4j.pandas_graph.PandasGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasGraph</span></code></a> provides multiple facilities to operate on graph’s nodes (mostly wrapped
+by <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> and <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>) using some data stored in <cite>pandas.DataFrame</cite>
+tables. One can create <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> instances and relationships between nodes based
+on rows of given table.</p>
 <dl class="py method">
 <dt id="pandas2neo4j.pandas_graph.PandasGraph.create_graph_object">
 <code class="sig-name descname"><span class="pre">create_graph_object</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subgraph</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">py2neo.ogm.Model</span><span class="p"><span class="pre">,</span> </span><span class="pre">py2neo.data.Entity</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph.create_graph_object" title="Permalink to this definition">¶</a></dt>
@@ -247,9 +253,9 @@ that will be created.</p>
 depending on <cite>model_class</cite> parameter. If <cite>model_class</cite> is a <cite>str</cite> the function will create a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instance for each row, where <cite>model_class</cite> value will be used as each node’s label
 and all the columns in the <cite>df</cite> will be transformed into properties. If <cite>model_class</cite> is an
-<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code> instance but not the <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code> it must provide
+<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code> instance but not the <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> it must provide
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">from_pandas_series()</span></code> classmethod that construct a class instance given a <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code>
-containing a table’s row data. If <cite>model_class</cite> is a subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code>
+containing a table’s row data. If <cite>model_class</cite> is a subclass of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>
 the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code> will be triggered.</p>
 <p><cite>chunk_size</cite> parameter can be used if the <cite>df</cite> table is large and should be splitted into chunks when
 creating the nodes. It specifies the maximal numbers of graph nodes to be created within a single transaction.
@@ -292,10 +298,10 @@ table into chunks, so the size of each part may be different than the number spe
 <li><p><strong>df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) – A table with relationships key pairs. Each row should contain ids of already existing nodes in
 <cite>from_key_column</cite> and <cite>to_key_column</cite> columns.</p></li>
 <li><p><strong>relationship</strong> (<em>str</em>) – Name of the relationship that should be created</p></li>
-<li><p><strong>from_model_class</strong> (Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>, str]) – Either <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass (e.g. subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code>)
+<li><p><strong>from_model_class</strong> (Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>, str]) – Either <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass (e.g. subclass of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>)
 or <cite>str</cite> with class name/label of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code>/<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances that
 should be starting nodes of each relationship.</p></li>
-<li><p><strong>to_model_class</strong> (Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>, str]) – Either <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass (e.g. subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.PandasModel</span></code>)
+<li><p><strong>to_model_class</strong> (Union[<code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>, str]) – Either <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> subclass (e.g. subclass of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>)
 or <cite>str</cite> with class name/label of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code>/<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances that
 should be ending nodes of each relationship.</p></li>
 <li><p><strong>from_key_column</strong> (<em>str</em>) – Name of the column in <cite>df</cite> table containing ids of the relationships starting nodes.</p></li>
@@ -325,7 +331,7 @@ parameter.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>label</strong> (<em>str</em>) – label of nodes that should be dumped to the table.</p></li>
-<li><p><strong>columns</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional.</em>) – list of produced table columns names.</p></li>
+<li><p><strong>columns</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – list of produced table columns names.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -341,7 +347,7 @@ parameter.</p>
 provide <cite>to_dict</cite> method that is used to construct a row for each node. If only subset of the
 dictionary items returned by the <cite>to_dict</cite> methods should be used one can specify them (and their
 order) with <cite>columns</cite> parameter.</p>
-<p><cite>to_dict</cite> method is provided by each <cite>pandas2neo4j.PandasModel</cite> instance.</p>
+<p><cite>to_dict</cite> method is provided by each <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -554,7 +560,8 @@ and <code class="xref py py-class docutils literal notranslate"><span class="pre
 <dl class="py method">
 <dt id="pandas2neo4j.pandas_graph.PandasGraph.schema">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">schema</span></code><a class="headerlink" href="#pandas2neo4j.pandas_graph.PandasGraph.schema" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Schema</span></code> object of underlying graph.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -565,22 +572,148 @@ and <code class="xref py py-class docutils literal notranslate"><span class="pre
 <dt id="pandas2neo4j.pandas_model.PandasModel">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.pandas_model.</span></code><code class="sig-name descname"><span class="pre">PandasModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.series.Series</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.pandas_model.PandasModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Model</span></code></p>
+<p>Subclass of <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code> designed to ease models creation based on rows of a <cite>pandas.DataFrame</cite>.</p>
+<p>A <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> subclass should have its properties named same as the columns of the table
+that is going to be used for instances initialization. An instance can be then initialized with
+a single row of such table - it will select only columns matching the class’ properties and use them
+to set the properties’ values.</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">properties.SchemaProperty()</span></code> subclasses can be used to specify properties along with their types.</p>
 <dl class="py method">
 <dt id="pandas2neo4j.pandas_model.PandasModel.to_dict">
 <code class="sig-name descname"><span class="pre">to_dict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">properties</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#pandas2neo4j.pandas_model.PandasModel.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Create dictionary with properties and their values. This method is used to create <cite>pandas.DataFrame</cite>
+table from <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> nodes available in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>properties</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – List of properties that should be included in the dictionary. If not used
+all the available properties are returned.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary with properties names and their values.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt id="pandas2neo4j.pandas_model.models_to_dataframe">
 <code class="sig-prename descclassname"><span class="pre">pandas2neo4j.pandas_model.</span></code><code class="sig-name descname"><span class="pre">models_to_dataframe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><span class="pre">pandas2neo4j.pandas_model.PandasModel</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="headerlink" href="#pandas2neo4j.pandas_model.models_to_dataframe" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Construct a <cite>pandas.DataFrame</cite> from given collection of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> instances. Each row of
+created table corresponds to a single node. If <cite>columns</cite> is used it determines properties stored
+in the table, otherwise the <cite>DataFrame</cite> contains column for each available property of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>models</strong> (<cite>Iterable[:class:</cite>.PandasModel`]`) – Collection of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> instances that should be used to construct the table.</p></li>
+<li><p><strong>columns</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – List of columns of constructed table. Column names must match names of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>
+properties. If not used all the available properties are used to construct each row.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> table where rows correspond to properties values of <cite>models</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt id="pandas2neo4j.pandas_model.nodes_to_dataframe">
 <code class="sig-prename descclassname"><span class="pre">pandas2neo4j.pandas_model.</span></code><code class="sig-name descname"><span class="pre">nodes_to_dataframe</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">py2neo.data.Node</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">pandas.core.frame.DataFrame</span><a class="headerlink" href="#pandas2neo4j.pandas_model.nodes_to_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a <cite>pandas.DataFrame</cite> from given collection of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> nodes. Each row of
+created table corresponds to a single node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (<cite>Iterable`[:class:`py2neo.Nodes</cite>]`) – Collection of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances that should be used to construct the table.</p></li>
+<li><p><strong>columns</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – List of columns of constructed table. If used they must match names of nodes properties.
+If not used the table’s columns are constructed based on all available properties.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> table where rows correspond to properties values of <cite>nodes</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-pandas2neo4j.properties">
+<span id="pandas2neo4j-properties-module"></span><h2>pandas2neo4j.properties module<a class="headerlink" href="#module-pandas2neo4j.properties" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="pandas2neo4j.properties.BooleanProperty">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.properties.</span></code><code class="sig-name descname"><span class="pre">BooleanProperty</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cast_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.properties.BooleanProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pandas2neo4j.properties.SchemaProperty" title="pandas2neo4j.properties.SchemaProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.properties.SchemaProperty</span></code></a></p>
+<p>Property storing <cite>bool</cite> object.</p>
+<dl class="py attribute">
+<dt id="pandas2neo4j.properties.BooleanProperty.TYPE">
+<code class="sig-name descname"><span class="pre">TYPE</span></code><a class="headerlink" href="#pandas2neo4j.properties.BooleanProperty.TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pandas2neo4j.properties.FloatProperty">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.properties.</span></code><code class="sig-name descname"><span class="pre">FloatProperty</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cast_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.properties.FloatProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pandas2neo4j.properties.SchemaProperty" title="pandas2neo4j.properties.SchemaProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.properties.SchemaProperty</span></code></a></p>
+<p>Property storing <cite>float</cite> object.</p>
+<dl class="py attribute">
+<dt id="pandas2neo4j.properties.FloatProperty.TYPE">
+<code class="sig-name descname"><span class="pre">TYPE</span></code><a class="headerlink" href="#pandas2neo4j.properties.FloatProperty.TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pandas2neo4j.properties.IntegerProperty">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.properties.</span></code><code class="sig-name descname"><span class="pre">IntegerProperty</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cast_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.properties.IntegerProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pandas2neo4j.properties.SchemaProperty" title="pandas2neo4j.properties.SchemaProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.properties.SchemaProperty</span></code></a></p>
+<p>Property storing <cite>int</cite> object.</p>
+<dl class="py attribute">
+<dt id="pandas2neo4j.properties.IntegerProperty.TYPE">
+<code class="sig-name descname"><span class="pre">TYPE</span></code><a class="headerlink" href="#pandas2neo4j.properties.IntegerProperty.TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pandas2neo4j.properties.ListProperty">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.properties.</span></code><code class="sig-name descname"><span class="pre">ListProperty</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nested_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.properties.ListProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pandas2neo4j.properties.SchemaProperty" title="pandas2neo4j.properties.SchemaProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.properties.SchemaProperty</span></code></a></p>
+<p>Property storing <cite>list</cite> object. <cite>nested_type</cite> determines type of the list’s elements
+(lists with elements of various type are not supported.)</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="pandas2neo4j.properties.SchemaProperty">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.properties.</span></code><code class="sig-name descname"><span class="pre">SchemaProperty</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cast_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.properties.SchemaProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.ogm.Property</span></code></p>
+<p>Extension of <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Property</span></code> that supports specifying a property’s type.</p>
+<p>If initialized with <cite>not_null=True</cite> a <code class="xref py py-class docutils literal notranslate"><span class="pre">ogm.Model</span></code>/<a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>
+cannot be created with <cite>NaN</cite>/<cite>None</cite> value for the property. It can however still be
+initialized without specifying the property, but such a restriction is especially
+useful when creating model instances based on <cite>pandas.DataFrame</cite> rows, where some
+values may not be provided, so <cite>NaN</cite> would be used.</p>
+<dl class="py attribute">
+<dt id="pandas2neo4j.properties.SchemaProperty.TYPE">
+<code class="sig-name descname"><span class="pre">TYPE</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#pandas2neo4j.properties.SchemaProperty.TYPE" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="pandas2neo4j.properties.StringProperty">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">pandas2neo4j.properties.</span></code><code class="sig-name descname"><span class="pre">StringProperty</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cast_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">not_null</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pandas2neo4j.properties.StringProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pandas2neo4j.properties.SchemaProperty" title="pandas2neo4j.properties.SchemaProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas2neo4j.properties.SchemaProperty</span></code></a></p>
+<p>Property storing <cite>string</cite> object.</p>
+<dl class="py attribute">
+<dt id="pandas2neo4j.properties.StringProperty.TYPE">
+<code class="sig-name descname"><span class="pre">TYPE</span></code><a class="headerlink" href="#pandas2neo4j.properties.StringProperty.TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 <div class="section" id="module-pandas2neo4j">

@@ -28,6 +28,14 @@ pandas2neo4j.pandas\_model module
    :undoc-members:
    :show-inheritance:
 
+pandas2neo4j.properties module
+------------------------------
+
+.. automodule:: pandas2neo4j.properties
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

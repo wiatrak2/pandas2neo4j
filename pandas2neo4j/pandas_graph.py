@@ -18,8 +18,19 @@ from pandas2neo4j.errors import (
 
 
 class PandasGraph(ogm.Repository):
+    """
+    Class representing the underlying graph.
+
+    :class:`.PandasGraph` provides multiple facilities to operate on graph's nodes (mostly wrapped
+    by :class:`ogm.Model` and :class:`.PandasModel`) using some data stored in `pandas.DataFrame`
+    tables. One can create :class:`.PandasModel` instances and relationships between nodes based
+    on rows of given table.
+    """
     @property
     def schema(self) -> py2neo.Schema:
+        """
+        :class:`py2neo.Schema` object of underlying graph.
+        """
         return self.graph.schema
 
     @cached_property
@@ -140,11 +151,11 @@ class PandasGraph(ogm.Repository):
         :type df: :class:`pandas.DataFrame`
         :param relationship: Name of the relationship that should be created
         :type relationship: str
-        :param from_model_class: Either :class:`ogm.Model` subclass (e.g. subclass of :class:`pandas2neo4j.PandasModel`)
+        :param from_model_class: Either :class:`ogm.Model` subclass (e.g. subclass of :class:`.PandasModel`)
             or `str` with class name/label of :class:`py2neo.ogm.Model`/:class:`py2neo.Node` instances that
             should be starting nodes of each relationship.
         :type from_model_class: Union[:class:`ogm.Model`, str]
-        :param to_model_class: Either :class:`ogm.Model` subclass (e.g. subclass of :class:`pandas2neo4j.PandasModel`)
+        :param to_model_class: Either :class:`ogm.Model` subclass (e.g. subclass of :class:`.PandasModel`)
             or `str` with class name/label of :class:`py2neo.ogm.Model`/:class:`py2neo.Node` instances that
             should be ending nodes of each relationship.
         :type to_model_class: Union[:class:`ogm.Model`, str]
@@ -201,9 +212,9 @@ class PandasGraph(ogm.Repository):
         depending on `model_class` parameter. If `model_class` is a `str` the function will create a
         :class:`py2neo.Node` instance for each row, where `model_class` value will be used as each node's label
         and all the columns in the `df` will be transformed into properties. If `model_class` is an
-        :class:`py2neo.ogm.Model` instance but not the :class:`pandas2neo4j.PandasModel` it must provide
+        :class:`py2neo.ogm.Model` instance but not the :class:`.PandasModel` it must provide
         :meth:`from_pandas_series` classmethod that construct a class instance given a :class:`pandas.Series`
-        containing a table's row data. If `model_class` is a subclass of :class:`pandas2neo4j.PandasModel`
+        containing a table's row data. If `model_class` is a subclass of :class:`.PandasModel`
         the :meth:`__init__` will be triggered.
 
         `chunk_size` parameter can be used if the `df` table is large and should be splitted into chunks when
@@ -372,7 +383,7 @@ class PandasGraph(ogm.Repository):
         dictionary items returned by the `to_dict` methods should be used one can specify them (and their
         order) with `columns` parameter.
 
-        `to_dict` method is provided by each `pandas2neo4j.PandasModel` instance.
+        `to_dict` method is provided by each :class:`.PandasModel` instance.
 
         :param model_class: class of nodes that should be used to construct the table.
         :type model_class: :class:`ogm.Model`
@@ -395,7 +406,7 @@ class PandasGraph(ogm.Repository):
         :param label: label of nodes that should be dumped to the table.
         :type label: str
         :param columns: list of produced table columns names.
-        :type columns: List[str], optional.
+        :type columns: List[str], optional
         :return: :class:`pandas.DataFrame` which rows represent the graph's nodes.
         """
         return pandas2neo4j.nodes_to_dataframe(self._node_matcher.match(label), columns)

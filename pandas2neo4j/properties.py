@@ -5,6 +5,15 @@ from pandas2neo4j.errors import PropertyValueWithInvalidTypeError, NotNullProper
 
 
 class SchemaProperty(py2neo.ogm.Property):
+    """
+    Extension of :class:`ogm.Property` that supports specifying a property's type.
+
+    If initialized with `not_null=True` a :class:`ogm.Model`/:class:`.PandasModel`
+    cannot be created with `NaN`/`None` value for the property. It can however still be
+    initialized without specifying the property, but such a restriction is especially
+    useful when creating model instances based on `pandas.DataFrame` rows, where some
+    values may not be provided, so `NaN` would be used.
+    """
     TYPE = None
 
     def __init__(self, cast_value=True, not_null=False, key=None, default=None):
@@ -51,22 +60,40 @@ class SchemaProperty(py2neo.ogm.Property):
 
 
 class StringProperty(SchemaProperty):
+    """
+    Property storing `string` object.
+    """
     TYPE = str
 
 
 class IntegerProperty(SchemaProperty):
+    """
+    Property storing `int` object.
+    """
     TYPE = int
 
 
 class FloatProperty(SchemaProperty):
+    """
+    Property storing `float` object.
+    """
     TYPE = float
 
 
 class BooleanProperty(SchemaProperty):
+    """
+    Property storing `bool` object.
+    """
     TYPE = bool
 
 
 class ListProperty(SchemaProperty):
+    """
+    Property storing `list` object. `nested_type` determines type of the list's elements
+    (lists with elements of various type are not supported.)
+    """
+    TYPE = list
+
     def __init__(self, nested_type, *args, **kwargs):
         self.nested_type = nested_type
         super().__init__(*args, **kwargs)
