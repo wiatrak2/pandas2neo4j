@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Welcome to pandas2neo4j’s documentation! &mdash; pandas2neo4j  documentation</title>
+  <title>pandas2neo4j documentation &mdash; pandas2neo4j  documentation</title>
   
 
   
@@ -84,7 +84,7 @@
             
               <!-- Local TOC -->
               <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Welcome to pandas2neo4j’s documentation!</a></li>
+<li><a class="reference internal" href="#">pandas2neo4j documentation</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </div>
@@ -134,7 +134,7 @@
     
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Welcome to pandas2neo4j’s documentation!</li>
+      <li>pandas2neo4j documentation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,8 +153,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-pandas2neo4j-s-documentation">
-<h1>Welcome to pandas2neo4j’s documentation!<a class="headerlink" href="#welcome-to-pandas2neo4j-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pandas2neo4j-documentation">
+<h1>pandas2neo4j documentation<a class="headerlink" href="#pandas2neo4j-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This package provides facilities design to ease integration between <a class="reference external" href="https://pandas.pydata.org">pandas</a> tables
+represented as <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> objects and <a class="reference external" href="https://neo4j.com">neo4j</a> graph database. To interact
+with the database <a class="reference external" href="https://py2neo.readthedocs.io/en/latest/index.html">py2neo</a> client library is used.</p>
+<p><a class="reference internal" href="pandas2neo4j.html#pandas2neo4j.pandas_graph.PandasGraph" title="pandas2neo4j.pandas_graph.PandasGraph"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasGraph</span></code></a> is the core of <cite>padnas</cite> - <cite>neo4j</cite> connection. It allows to create
+objects in remote graph based on <cite>DataFrame</cite> values as well as storing the graph’s data in
+form of the <cite>DataFrame</cite> tables.</p>
+<p>The <cite>pandas2neo4j</cite> implements some extensions of <cite>py2neo</cite> classes like <a class="reference internal" href="pandas2neo4j.html#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>
+which represents a model class which instance can be easily obtained from a <cite>DataFrame</cite> row
+or <a class="reference internal" href="pandas2neo4j.html#pandas2neo4j.properties.SchemaProperty" title="pandas2neo4j.properties.SchemaProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">SchemaProperty</span></code></a> which ensures that node’s properties follow defined schema.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
