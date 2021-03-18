@@ -605,7 +605,7 @@ in the table, otherwise the <cite>DataFrame</cite> contains column for each avai
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>models</strong> (<cite>Iterable[:class:</cite>.PandasModel`]`) – Collection of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> instances that should be used to construct the table.</p></li>
+<li><p><strong>models</strong> (Iterable[<a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>]) – Collection of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a> instances that should be used to construct the table.</p></li>
 <li><p><strong>columns</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – List of columns of constructed table. Column names must match names of <a class="reference internal" href="#pandas2neo4j.pandas_model.PandasModel" title="pandas2neo4j.pandas_model.PandasModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PandasModel</span></code></a>
 properties. If not used all the available properties are used to construct each row.</p></li>
 </ul>
@@ -624,7 +624,7 @@ created table corresponds to a single node.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>nodes</strong> (<cite>Iterable`[:class:`py2neo.Nodes</cite>]`) – Collection of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances that should be used to construct the table.</p></li>
+<li><p><strong>nodes</strong> (Iterable`[<code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Nodes</span></code>]) – Collection of <code class="xref py py-class docutils literal notranslate"><span class="pre">py2neo.Node</span></code> instances that should be used to construct the table.</p></li>
 <li><p><strong>columns</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – List of columns of constructed table. If used they must match names of nodes properties.
 If not used the table’s columns are constructed based on all available properties.</p></li>
 </ul>

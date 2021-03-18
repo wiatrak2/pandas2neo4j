@@ -42,7 +42,7 @@ def models_to_dataframe(models: Iterable[PandasModel], columns: List[str] = None
     in the table, otherwise the `DataFrame` contains column for each available property of :class:`.PandasModel`.
 
     :param models: Collection of :class:`.PandasModel` instances that should be used to construct the table.
-    :type models: `Iterable[:class:`.PandasModel`]`
+    :type models: Iterable[:class:`.PandasModel`]
     :param columns: List of columns of constructed table. Column names must match names of :class:`.PandasModel`
         properties. If not used all the available properties are used to construct each row.
     :type columns: List[str], optional
@@ -57,7 +57,7 @@ def nodes_to_dataframe(nodes: Iterable[py2neo.Node], columns: List[str] = None) 
     created table corresponds to a single node.
 
     :param nodes: Collection of :class:`py2neo.Node` instances that should be used to construct the table.
-    :type nodes: `Iterable`[:class:`py2neo.Nodes`]`
+    :type nodes: Iterable`[:class:`py2neo.Nodes`]
     :param columns: List of columns of constructed table. If used they must match names of nodes properties.
         If not used the table's columns are constructed based on all available properties.
     :type columns: List[str], optional
