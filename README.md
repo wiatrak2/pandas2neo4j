@@ -1,6 +1,6 @@
 # pandas2neo4j
 
-`pandas2neo4j` is a python package designed to easily exchange data between [pandas](https://pandas.org) `DataFrame` and [neo4j](https://neo4j.org) database. It uses [py2neo](https://py2neo.readthedocs.io) library to interact with the database.
+`pandas2neo4j` is a python package designed to easily exchange data between [pandas](https://pandas.pydata.org) `DataFrame` and [neo4j](https://neo4j.com) database. It uses [py2neo](https://py2neo.readthedocs.io) library to interact with the database.
 
 ## Installation
 To install the package you need to clone it locally and use pip:
