@@ -10,6 +10,9 @@ cd pandas2neo4j
 pip install .
 ```
 
+## Documentation
+You can read [project documentation](https://pandas2neo4j.readthedocs.io/en/latest/) hosted on [Read the Docs](https://readthedocs.org).
+
 ## Basic usage
 Check the [notebook](examples/pandas2neo4j_demo.ipynb) with full usage demo.
 
