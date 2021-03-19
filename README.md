@@ -11,7 +11,7 @@ pip install .
 ```
 
 ## Basic usage
-Check example [notebook](examples/pandas2neo4j_demo.ipynb) with usage demo.
+Check the [notebook](examples/pandas2neo4j_demo.ipynb) with full usage demo.
 
 ### Graph initialization
 `pandas2neo4j.PandasGraph` allows to connect a neo4j database instance with its URI:

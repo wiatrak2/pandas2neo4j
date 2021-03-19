@@ -25,6 +25,16 @@ or :class:`.SchemaProperty` which ensures that node's properties follow defined 
 .. _neo4j: https://neo4j.com
 .. _py2neo: https://py2neo.readthedocs.io/en/latest/index.html
 
+Core functionalities
+====================
+.. toctree::
+    :maxdepth: 2
+
+* :mod:`pandas2neo4j.pandas_graph`
+* :mod:`pandas2neo4j.pandas_model`
+* :mod:`pandas2neo4j.properties`
+
+
 Indices and tables
 ==================
 

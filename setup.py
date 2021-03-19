@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 setup(
     name="pandas2neo4j",
-    description="Convert pandas DataFrames to neo4j graph",
-    version="0.0.1dev",
+    description="Integrate data between pandas DataFrame and neo4j graph",
+    version="0.1.0",
     author=u"Wojciech Pratkowiecki",
     author_email="wpratkowiecki@gmail.com",
     packages=find_packages(),
